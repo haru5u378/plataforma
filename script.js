@@ -19,7 +19,7 @@ player.style.top = `${window.innerHeight - ground.offsetHeight - player.offsetHe
 document.addEventListener("keydown", (event) => {
     if (event.key === "ArrowUp" && !isJumping) {
         isJumping = true;
-        velocity = -jumpSpeed;
+        velocity = -jumpSpeed; // Começa o pulo
     }
     if (event.key === "ArrowLeft") {
         movePlayer(-moveSpeed);
@@ -101,7 +101,7 @@ function checkCoinCollection() {
 
 // Reseta o nível com novas moedas e plataformas
 function resetLevel() {
-    for (let i = 0; i < 4; i++) {
+    for (let i = 0; i < 6; i++) {
         const newCoin = document.createElement("div");
         newCoin.classList.add("coin");
         newCoin.style.left = `${Math.random() * (window.innerWidth - 50)}px`;
