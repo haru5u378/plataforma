@@ -2,18 +2,20 @@ const player = document.getElementById("player");
 const platforms = Array.from(document.getElementsByClassName("platform"));
 const coins = Array.from(document.getElementsByClassName("coin"));
 const ground = document.getElementById("ground");
+const levelText = document.getElementById("level");
 
 let isJumping = false;
 let velocity = 0;
 let gravity = 1;
 let jumpSpeed = 15;
 let moveSpeed = 5;
+let currentLevel = 1;
 
-// Posição inicial do personagem
+// Configurações iniciais do personagem
 player.style.left = "50px";
 player.style.top = `${window.innerHeight - ground.offsetHeight - player.offsetHeight}px`;
 
-// Movimentação com as setas
+// Movimentação
 document.addEventListener("keydown", (event) => {
     if (event.key === "ArrowUp" && !isJumping) {
         isJumping = true;
@@ -34,11 +36,11 @@ function movePlayer(speed) {
     }
 }
 
-// Aplica gravidade ao personagem
+// Gravidade e colisão
 function applyGravity() {
     const playerBottom = parseInt(player.style.top) + player.offsetHeight;
 
-    // Verifica se o personagem está no chão ou em plataformas
+    // Checa se está no chão ou em plataformas
     let onGround = playerBottom >= window.innerHeight - ground.offsetHeight;
     let onPlatform = platforms.some(platform => {
         const platformRect = platform.getBoundingClientRect();
@@ -68,7 +70,7 @@ function applyGravity() {
     }
 }
 
-// Verifica colisão entre dois elementos
+// Verifica colisão
 function isCollision(rect1, rect2) {
     const r1 = rect1.getBoundingClientRect();
     const r2 = rect2.getBoundingClientRect();
@@ -80,7 +82,7 @@ function isCollision(rect1, rect2) {
     );
 }
 
-// Verifica se o personagem coletou moedas
+// Verifica moedas coletadas
 function checkCoinCollection() {
     coins.forEach((coin, index) => {
         if (isCollision(player, coin)) {
@@ -88,9 +90,28 @@ function checkCoinCollection() {
             coins.splice(index, 1);
         }
     });
+
+    // Passa de nível se todas as moedas forem coletadas
+    if (coins.length === 0) {
+        currentLevel++;
+        levelText.innerText = `Nível: ${currentLevel}`;
+        resetLevel();
+    }
 }
 
-// Atualiza a cada intervalo
+// Reseta o nível com novas moedas e plataformas
+function resetLevel() {
+    for (let i = 0; i < 4; i++) {
+        const newCoin = document.createElement("div");
+        newCoin.classList.add("coin");
+        newCoin.style.left = `${Math.random() * (window.innerWidth - 50)}px`;
+        newCoin.style.top = `${Math.random() * (window.innerHeight - 200)}px`;
+        document.getElementById("game-area").appendChild(newCoin);
+        coins.push(newCoin);
+    }
+}
+
+// Atualiza tudo
 setInterval(() => {
     applyGravity();
     checkCoinCollection();
