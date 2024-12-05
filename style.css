@@ -2,6 +2,26 @@ body {
     margin: 0;
     overflow: hidden;
     background-color: #87CEEB;
+    font-family: Arial, sans-serif;
+}
+
+#level {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    font-size: 24px;
+    color: #000;
+    background-color: rgba(255, 255, 255, 0.7);
+    padding: 5px 10px;
+    border-radius: 5px;
+}
+
+#ground {
+    width: 100%;
+    height: 50px;
+    background-color: green;
+    position: absolute;
+    bottom: 0;
 }
 
 #player {
@@ -9,7 +29,7 @@ body {
     height: 50px;
     background-color: red;
     position: absolute;
-    bottom: 0;
+    bottom: 50px; /* Alinhado com o chão */
     left: 100px;
 }
 
@@ -26,13 +46,4 @@ body {
     height: 20px;
     background-color: green;
     position: absolute;
-}
-
-button {
-    font-size: 20px;
-    padding: 10px 20px;
-    margin: 10px;
-    border: none;
-    cursor: pointer;
-    border-radius: 5px;
 }
