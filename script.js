@@ -1,14 +1,15 @@
 let player = document.getElementById("player");
 let levelDisplay = document.getElementById("level");
+let ground = document.getElementById("ground");
 let coins = [];
 let platforms = [];
 let isJumping = false;
 let jumpHeight = 0;
-let gravity = 1;
-let jumpForce = 15;
+let gravity = 2; // Ajuste da gravidade
+let jumpForce = 20;
 let score = 0;
 
-let playerSpeed = 8;
+let playerSpeed = 5;
 let playerSpeedX = 0;
 let keyState = {};
 
@@ -52,7 +53,9 @@ function applyGravity() {
         jumpHeight -= gravity;
         let newTop = (parseInt(player.style.top) || window.innerHeight - 100) - jumpHeight;
 
-        if (newTop >= window.innerHeight - 100 - player.offsetHeight) {
+        // Verifica se o personagem encosta no chão ou em plataformas
+        let onPlatform = platforms.some(platform => isCollision(player, platform));
+        if (newTop >= window.innerHeight - 100 - player.offsetHeight || onPlatform) {
             isJumping = false;
             player.style.top = window.innerHeight - 100 - player.offsetHeight + "px";
         } else {
@@ -67,6 +70,7 @@ function checkCollision() {
         if (isCollision(player, coin)) {
             score++;
             coin.remove();
+            coins = coins.filter(c => c !== coin);
         }
     });
 }
@@ -84,10 +88,12 @@ function isCollision(player, object) {
 
 // Cria um nível com moedas e plataformas
 function createLevel(level) {
+    coins.forEach(coin => coin.remove());
+    platforms.forEach(platform => platform.remove());
     coins = [];
     platforms = [];
 
-    for (let i = 0; i < level * 5; i++) {
+    for (let i = 0; i < level * 3; i++) {
         let coin = document.createElement("div");
         coin.classList.add("coin");
         coin.style.top = Math.random() * (window.innerHeight - 200) + "px";
@@ -99,7 +105,7 @@ function createLevel(level) {
     for (let i = 0; i < level * 2; i++) {
         let platform = document.createElement("div");
         platform.classList.add("platform");
-        platform.style.top = Math.random() * (window.innerHeight - 200) + "px";
+        platform.style.top = Math.random() * (window.innerHeight - 300) + "px";
         platform.style.left = Math.random() * (window.innerWidth - 100) + "px";
         document.body.appendChild(platform);
         platforms.push(platform);
@@ -135,6 +141,10 @@ function startGame() {
 }
 
 // Controles de teclas
+function isKeyPressed(key) {
+    return keyState[key] || false;
+}
+
 window.addEventListener("keydown", (e) => {
     keyState[e.key] = true;
     if (e.key === " ") {
