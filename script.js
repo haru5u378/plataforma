@@ -17,7 +17,7 @@ player.style.top = `${window.innerHeight - ground.offsetHeight - player.offsetHe
 
 // Movimentação
 document.addEventListener("keydown", (event) => {
-    if (event.key === "ArrowUp" && !isJumping) {
+    if (event.code === "Space" && !isJumping) {
         isJumping = true;
         velocity = -jumpSpeed; // Começa o pulo
     }
